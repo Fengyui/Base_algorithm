@@ -1,0 +1,57 @@
+
+bestV=0   #最大的价值
+curW=0  #当前重量
+curV=0   #当前价值
+bestx=None  #最优的装包情况
+
+def bound(i):
+    #这是普通背包问题
+    left = c - curW   #剩余重量
+    b = curV          #当前价值
+    if w[i-1] < left:
+        left -= w[i-1]
+        b += v[i-1]
+        i += 1  
+    else:
+        b += v[i-1]*left/w[i-1]
+    return b
+
+def backtrack(i):
+  global bestV,curW,curV,x,bestx
+  #递归出口
+  if i>=n:
+    if bestV<curV:
+      bestV=curV
+      bestx=x[:]
+  else:
+      #约束条件
+    if curW+w[i]<=c:
+      x[i]=True
+      curW+=w[i]
+      curV+=v[i]
+      backtrack(i+1)
+      curW-=w[i]
+      curV-=v[i]
+      #限界条件
+    if(bound(i+1)>bestV):
+        backtrack(i+1)
+    x[i]=False
+    backtrack(i+1)
+    
+if __name__=='__main__':
+#  n=5
+#  c=10
+#  w=[2,2,6,5,4]
+#  v=[6,3,5,4,6]
+#  x=[False for i in range(n)]
+#  backtrack(0)
+#  print(bestV)
+#  print(bestx)
+  n=4
+  c=7
+  w=[3,5,2,1]
+  v=[9,10,7,4]
+  x=[False for i in range(n)]
+  backtrack(0)
+  print(bestV)
+  print(bestx)
